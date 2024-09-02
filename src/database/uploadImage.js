@@ -1,16 +1,20 @@
+// firebaseStorageService.js
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import app from "../firebaseConfig"; // Import your Firebase app instance
 
-// Initialize Firebase Storage
-const storage = getStorage();
+const storage = getStorage(app);
 
 /**
- * Uploads an image to Firebase Storage.
- * @param {File} file - The image file to upload.
- * @param {string} path - The path in Firebase Storage where the image will be stored.
- * @returns {Promise<string>} - A promise that resolves to the download URL of the uploaded image.
+ * Uploads a file to Firebase Storage and returns the download URL.
+ * @param {File} file - The file to upload.
+ * @param {string} folderPath - The folder path where the file will be stored.
+ * @returns {Promise<string>} - A promise that resolves to the download URL of the uploaded file.
  */
-async function uploadImage(file, path) {
-  const storageRef = ref(storage, path);
-  await uploadBytes(storageRef, file);
-  return getDownloadURL(storageRef); // Return the download URL
+async function uploadFile(file, folderPath = "images") {
+  const storageRef = ref(storage, `${folderPath}/${file.name}`);
+  const snapshot = await uploadBytes(storageRef, file);
+  const downloadURL = await getDownloadURL(snapshot.ref);
+  return downloadURL;
 }
+
+export default uploadFile;

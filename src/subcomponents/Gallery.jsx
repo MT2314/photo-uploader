@@ -10,7 +10,7 @@ const Gallery = () => {
 
   useEffect(() => {
     // Replace 'images/' with the actual folder path in your storage
-    fetchAllImageUrls("gs://edward--nicole-wedding.appspot.com")
+    fetchAllImageUrls("gs://edward--nicole-wedding.appspot.com/images/")
       .then((urls) => {
         setImages(urls); // Set the image URLs in the state
       })
