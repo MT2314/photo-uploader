@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build && firebase deploy",
     "lint": "eslint .",
     "preview": "vite preview"
   },
