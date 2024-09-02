@@ -1,9 +1,9 @@
 // firebaseConfig.js
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getAnalytics } from "firebase/analytics";
+import { getStorage } from "firebase/storage";
 
-// Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyA1-OeRt37mba0N9CkVenELWVdEYu5aZ6Y",
   authDomain: "edward--nicole-wedding.firebaseapp.com",
@@ -16,9 +16,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// Initialize Firestore and Analytics
-const db = getFirestore(app);
-export const analytics = getAnalytics(app);
 
-export { db };
+// Initialize Firebase services
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+export { auth, db, storage };
 export default app;
