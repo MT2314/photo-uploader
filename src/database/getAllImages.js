@@ -1,7 +1,9 @@
+// Import the initialized Firebase app and necessary functions
+import app from "../firebaseConfig";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 
-// Initialize Firebase Storage
-const storage = getStorage();
+// Initialize Firebase Storage with the app instance
+const storage = getStorage(app);
 
 /**
  * Fetches download URLs for all images in a specific Firebase Storage folder.
