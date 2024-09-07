@@ -5,6 +5,7 @@ import App from "./App.jsx";
 // Mantine Component Library
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import '@mantine/carousel/styles.css';
 
 // Styles
 import "./styles/index.css";

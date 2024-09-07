@@ -1,12 +1,19 @@
 // App.jsx
 import { useEffect, useState } from "react";
-import { AppShell, Button, Group, Container } from "@mantine/core";
+import {
+  AppShell,
+  Button,
+  Group,
+  Container,
+  AppShellMain,
+} from "@mantine/core";
 // Auth
 import { auth } from "./firebaseConfig"; // Import the auth instance
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 // Components
 import Gallery from "./subcomponents/Gallery";
+import PhotoCarousel from "./subcomponents/PhotoCarousel";
 import Uploader from "./subcomponents/Uploader";
 
 function App() {
@@ -32,15 +39,20 @@ function App() {
   }, []);
 
   return (
-    <AppShell>
-      <Container>
-        <Group justify="center" mt="md" mb="xl">
+    <AppShell header={{ height: 100 }}>
+      <AppShell.Header>
+        Nicole and Edward Wedding
+        <Group justify="right" mt="md" mb="xl">
           <Button onClick={() => setActiveComponent("gallery")}>Gallery</Button>
           <Button onClick={() => setActiveComponent("upload")}>Upload</Button>
         </Group>
-
-        {activeComponent === "gallery" ? <Gallery /> : <Uploader />}
-      </Container>
+      </AppShell.Header>
+      <AppShellMain>
+        <Container>
+          {activeComponent === "gallery" ? <PhotoCarousel /> : <Uploader />}
+          {activeComponent === "gallery" ? <Gallery /> : <Uploader />}
+        </Container>
+      </AppShellMain>
     </AppShell>
   );
 }
