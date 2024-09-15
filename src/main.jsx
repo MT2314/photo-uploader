@@ -8,7 +8,8 @@ import "@mantine/core/styles.css";
 import '@mantine/carousel/styles.css';
 
 // Styles
-import "./styles/index.css";
+// import '@mantine/carousel/styles.css';
+// import "./styles/index.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
