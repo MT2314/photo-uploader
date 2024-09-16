@@ -1,19 +1,145 @@
-.App {
-    font-family: sans-serif;
-    /* text-align: center; */
-    background-color: #f6f9fe;
-    height: 100vh;
-  }
+/* Uploader.css */
+.uploader-container {
+  width: 80%;
+  margin: 0 auto;
+  font-family: 'Georgia', serif;
+  color: #4a4a4a;
+}
+
+.upload__image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-btn,
+.remove-btn {
+  padding: 12px 24px;
+  margin: 8px;
+  border: none;
+  background-color: #f8f0f2;
+  color: #4a4a4a;
+  cursor: pointer;
+  border-radius: 30px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover,
+.remove-btn:hover {
+  background-color: #e8dfe3;
+}
+
+.upload-btn:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.image-item {
+  position: relative;
+  margin: 15px;
+}
+
+.image-item img {
+  border: 3px solid #f8f0f2;
+  border-radius: 10px;
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.image-item__btn-wrapper {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+
+.update-btn,
+.remove-btn {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #4a4a4a;
+  border: none;
+  margin: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.update-btn:hover,
+.remove-btn:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.uploaded-urls {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.uploaded-urls h3 {
+  font-size: 24px;
+  color: #4a4a4a;
+  margin-bottom: 20px;
+}
+
+.uploaded-urls ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.uploaded-urls li {
+  margin: 10px 0;
+}
+
+.uploaded-urls a {
+  color: #b28451;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.uploaded-urls a:hover {
+  text-decoration: underline;
+}
+
+.upload-btn,
+.remove-btn,
+.update-btn {
+  font-family: 'Georgia', serif;
+}
+
+button:focus {
+  outline: none;
+}
+
+@media (max-width: 768px) {
   .image-item {
-    display: flex;
-    margin: 10px 0;
+    margin: 10px;
   }
-  .image-item__btn-wrapper {
-    display: flex;
-    flex-direction: column;
-    margin-left: 10px;
+
+  .image-item img {
+    width: 120px;
   }
-  button {
-    height: 40px;
+
+  .upload-btn,
+  .remove-btn {
+    padding: 10px 20px;
+    font-size: 14px;
   }
-  
+
+  .update-btn,
+  .remove-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}

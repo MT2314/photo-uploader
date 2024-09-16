@@ -1,92 +1,97 @@
+// Gallery.js
 import { useState, useEffect } from "react";
-import JSZip from "jszip";
-import { saveAs } from "file-saver";
-import { SimpleGrid, Image, Container, Button } from "@mantine/core";
-import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage"; // Firebase imports
+import {
+  SimpleGrid,
+  Image,
+  Container,
+  Title,
+  Modal,
+  useMantineTheme,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { fetchAllImageUrls } from "../database/getAllImages";
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
-  const [downloading, setDownloading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [opened, { open, close }] = useDisclosure(false);
+  const theme = useMantineTheme();
 
   useEffect(() => {
-    // Fetch all image URLs from Firebase Storage
-    const fetchImagesFromFirebase = async () => {
-      const storage = getStorage();
-      const listRef = ref(storage, "images"); // Replace with your folder path
-      try {
-        const res = await listAll(listRef); // List all files in the folder
-        const urls = await Promise.all(
-          res.items.map((itemRef) => getDownloadURL(itemRef))
-        );
-        setImages(urls); // Set image URLs in state
-      } catch (error) {
-        console.error("Error fetching images: ", error);
-      }
-    };
-
-    fetchImagesFromFirebase();
+    fetchAllImageUrls("gs://edward--nicole-wedding.appspot.com/images/")
+      .then((urls) => {
+        setImages(urls);
+      })
+      .catch(console.error);
   }, []);
 
-  const downloadImagesAsZip = async () => {
-    setDownloading(true);
-    const zip = new JSZip();
-    const folder = zip.folder("wedding-images");
-
-    // Fetch each image as a blob and add it to the zip
-    const imagePromises = images.map(async (url, index) => {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      folder.file(`image${index + 1}.jpg`, blob); // Add blob to ZIP
-    });
-
-    // Wait for all images to be fetched and added to the ZIP
-    await Promise.all(imagePromises);
-
-    // Generate ZIP and trigger download
-    zip.generateAsync({ type: "blob" }).then((content) => {
-      saveAs(content, "wedding-images.zip");
-      setDownloading(false); // Reset the download state
-    });
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    open();
   };
 
   return (
     <Container size="lg" py="xl">
-      <h1
-        style={{
+      <Title
+        align="center"
+        sx={{
           fontFamily: "'Cursive', sans-serif",
+          color: theme.colors.gray[8],
+          marginBottom: theme.spacing.xxl,
         }}
       >
-        Gallery
-      </h1>
-
-      <Button
-        onClick={downloadImagesAsZip}
-        mt="md"
-        variant="outline"
-        color="teal"
-        disabled={downloading}
-      >
-        {downloading ? "Downloading..." : "Download All Images as ZIP"}
-      </Button>
+        Our Wedding Gallery
+      </Title>
 
       <SimpleGrid
+      style={{marginTop: "20px"}}
         cols={3}
-        breakpoints={[ 
+        spacing="md"
+        breakpoints={[
           { maxWidth: "md", cols: 2 },
           { maxWidth: "sm", cols: 1 },
         ]}
-        spacing="md"
       >
         {images.map((image, index) => (
           <Image
             key={index}
             src={image}
-            alt={`Image ${index}`}
+            alt={`Wedding Photo ${index + 1}`}
             radius="md"
-            caption={`Image ${index}`}
+            withPlaceholder
+            onClick={() => handleImageClick(image)}
+            styles={{
+              image: {
+                cursor: "pointer",
+                transition: "transform 0.2s, box-shadow 0.2s",
+                border: `1px solid ${theme.colors.gray[3]}`,
+                "&:hover": {
+                  transform: "scale(1.02)",
+                  boxShadow: theme.shadows.sm,
+                },
+              },
+            }}
           />
         ))}
       </SimpleGrid>
+
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        size="auto"
+        overlayOpacity={0.6}
+        overlayBlur={3}
+        withCloseButton={false}
+        styles={{
+          modal: {
+            backgroundColor: "transparent",
+            boxShadow: "none",
+          },
+        }}
+      >
+        <Image src={selectedImage} alt="Enlarged Wedding Photo" radius="md" />
+      </Modal>
     </Container>
   );
 };

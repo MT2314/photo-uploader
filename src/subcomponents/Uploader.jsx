@@ -7,27 +7,31 @@ import "../styles/Uploader.css";
 const Uploader = () => {
   const [images, setImages] = React.useState([]);
   const [uploadedUrls, setUploadedUrls] = React.useState([]);
+  const [uploading, setUploading] = React.useState(false);
   const maxNumber = 69;
 
   const onChange = (imageList, addUpdateIndex) => {
-    // Set images locally
     setImages(imageList);
+  };
 
-    // Upload images to Firebase Storage
-    imageList.forEach(async (image) => {
-      if (!image.file) return; // Skip if the image doesn't have a file (e.g., previously uploaded images)
-
+  const uploadImages = async () => {
+    setUploading(true);
+    const urls = [];
+    for (const image of images) {
+      if (!image.file) continue;
       try {
-        const downloadURL = await uploadFile(image.file); // Use the service function
-        setUploadedUrls((prevState) => [...prevState, downloadURL]); // Save the download URL
+        const downloadURL = await uploadFile(image.file);
+        urls.push(downloadURL);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
-    });
+    }
+    setUploadedUrls((prevUrls) => [...prevUrls, ...urls]);
+    setUploading(false);
   };
 
   return (
-    <div className="App">
+    <div className="uploader-container">
       <ImageUploading
         multiple
         value={images}
@@ -47,39 +51,68 @@ const Uploader = () => {
         }) => (
           <div className="upload__image-wrapper">
             <button
-              style={isDragging ? { color: "red" } : null}
+              className="upload-btn"
+              style={
+                isDragging ? { backgroundColor: "#e8dfe3" } : null
+              }
               onClick={onImageUpload}
               {...dragProps}
             >
-              Click or Drop here
+              Click or Drag Images Here
             </button>
-            &nbsp;
-            <button onClick={onImageRemoveAll}>Remove all images</button>
-            {imageList.map((image, index) => (
-              <div key={index} className="image-item">
-                <img src={image.data_url} alt="" width="100" />
-                <div className="image-item__btn-wrapper">
-                  <button onClick={() => onImageUpdate(index)}>Update</button>
-                  <button onClick={() => onImageRemove(index)}>Remove</button>
+            {images.length > 0 && (
+              <button className="remove-btn" onClick={onImageRemoveAll}>
+                Remove All Images
+              </button>
+            )}
+            {images.length > 0 && (
+              <button
+                className="upload-btn"
+                onClick={uploadImages}
+                disabled={uploading}
+              >
+                {uploading ? "Uploading..." : "Upload Images"}
+              </button>
+            )}
+            <div className="image-preview">
+              {imageList.map((image, index) => (
+                <div key={index} className="image-item">
+                  <img src={image.data_url} alt="" />
+                  <div className="image-item__btn-wrapper">
+                    <button
+                      className="update-btn"
+                      onClick={() => onImageUpdate(index)}
+                    >
+                      Update
+                    </button>
+                    <button
+                      className="remove-btn"
+                      onClick={() => onImageRemove(index)}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
       </ImageUploading>
 
-      <div className="uploaded-urls">
-        <h3>Uploaded Images</h3>
-        <ul>
-          {uploadedUrls.map((url, index) => (
-            <li key={index}>
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                {url}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {uploadedUrls.length > 0 && (
+        <div className="uploaded-urls">
+          <h3>Uploaded Images</h3>
+          <ul>
+            {uploadedUrls.map((url, index) => (
+              <li key={index}>
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  View Image {index + 1}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
