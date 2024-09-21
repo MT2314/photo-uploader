@@ -94,13 +94,11 @@ function App() {
             />
           </div>
         </AppShell.Header>
-        <AppShellMain>
           <Container fluid h={50} size="lg" px="md" py="xl">
             {activeComponent === "home" && <Home />}
             {activeComponent === "gallery" && <Gallery />}
             {activeComponent === "upload" && <Uploader />}
           </Container>
-        </AppShellMain>
       </AppShell>
     </MantineProvider>
   );
