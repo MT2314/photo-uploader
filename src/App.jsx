@@ -6,6 +6,7 @@ import { MantineProvider } from "@mantine/core";
 import { auth } from "./firebaseConfig"; // Import the auth instance
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 // Components
+import Home from "./subcomponents/Home";
 import Gallery from "./subcomponents/Gallery";
 import PhotoCarousel from "./subcomponents/PhotoCarousel";
 import Uploader from "./subcomponents/Uploader";
@@ -14,7 +15,7 @@ import Button from "./subcomponents/Button";
 import HeaderLogo from "./assets/header_logo.png";
 
 function App() {
-  const [activeComponent, setActiveComponent] = useState("gallery");
+  const [activeComponent, setActiveComponent] = useState("home");
 
   useEffect(() => {
     // Check if the user is already signed in
@@ -38,7 +39,7 @@ function App() {
   return (
     <MantineProvider
       theme={{
-        fontFamily: "'Playfair Display', serif",
+        fontFamily: "'PT Serif', serif",
         colors: {
           brand: [
             "#f4ecec",
@@ -55,10 +56,12 @@ function App() {
         },
       }}
     >
-      <AppShell header={{ height: "300px" }}>
+      <AppShell>
         <AppShell.Header
           style={{
-            borderBottom: "4px solid #f7c5c1", // Light blush pink border
+            height: "300px",
+            position: "relative",
+            borderBottom: "4px solid #ACBD86", // Light blush pink border
             boxShadow: "0 6px 10px rgba(0, 0, 0, 0.1)",
             borderRadius: "500px",
           }}
@@ -82,17 +85,19 @@ function App() {
           >
             <Button
               label={"Gallery"}
+              disabled = {activeComponent === "gallery"}
               setActiveComponent={() => setActiveComponent("gallery")}
             />
             <Button
               label={"Upload"}
+              disabled = {activeComponent === "upload"}
               setActiveComponent={() => setActiveComponent("upload")}
             />
           </div>
         </AppShell.Header>
         <AppShellMain>
           <Container fluid h={50} size="lg" px="md" py="xl">
-            {/* {activeComponent === "home" && <PhotoCarousel />} */}
+            {activeComponent === "home" && <Home />}
             {activeComponent === "gallery" && <Gallery />}
             {activeComponent === "upload" && <Uploader />}
           </Container>
