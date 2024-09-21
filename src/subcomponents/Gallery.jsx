@@ -17,7 +17,6 @@ import { fetchAllImageUrls } from "../database/getAllImages";
 import { ref, getBlob } from "firebase/storage";
 import { saveAs } from "file-saver";
 import { storage } from "../firebaseConfig";
-import { Download } from "tabler-icons-react";
 
 // Helper function to extract filename from URL
 const extractFileName = (url) => {
@@ -112,7 +111,6 @@ const ImageModal = ({
           onClick={onDownload}
           variant="filled"
           color="teal"
-          leftIcon={<Download size={20} />}
           loading={isDownloading}
           styles={{
             root: {

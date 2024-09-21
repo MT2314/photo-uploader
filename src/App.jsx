@@ -8,7 +8,6 @@ import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 // Components
 import Home from "./subcomponents/Home";
 import Gallery from "./subcomponents/Gallery";
-import PhotoCarousel from "./subcomponents/PhotoCarousel";
 import Uploader from "./subcomponents/Uploader";
 import Button from "./subcomponents/Button";
 // Assets
