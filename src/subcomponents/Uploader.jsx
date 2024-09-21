@@ -10,7 +10,7 @@ const Uploader = () => {
   const [uploading, setUploading] = React.useState(false);
   const maxNumber = 69;
 
-  const onChange = (imageList, addUpdateIndex) => {
+  const onChange = (imageList) => {
     setImages(imageList);
   };
 
